@@ -1,4 +1,7 @@
 $(window).bind("load", function() {
+    // remove unnessary parameters from url
+    window.history.replaceState({}, document.title, "/" + "");
+
     const ssc = new SSC("https://ha.herpc.dtools.dev");
     var user = null, bal = { HIVE: 0, "SWAP.HIVE": 0, VAULT: 0 }, bridgebal;
 
