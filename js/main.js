@@ -24,6 +24,7 @@ $(window).bind("load", function() {
     }
 
     async function refresh () {
+        updateMin();
         bridgebal = await getBalances("hiveupme");
         $("#hiveliquidity").text(bridgebal.HIVE.toFixed(3));
         $("#swaphiveliquidity").text(bridgebal["SWAP.HIVE"].toFixed(3));
@@ -57,8 +58,14 @@ $(window).bind("load", function() {
         $(this).removeAttr("disabled");
     });
 
+    function updateMin () {
+        const insymbol = $("#input").val();
+        $("#minimum").text(`1 ${insymbol}`);
+    }
+
     function updateSwap(r) {
         try {
+            updateMin();
             const insymbol = $("#input").val();
             var outsymbol = $("#output").val();
             const val = $("#inputquantity").val();
