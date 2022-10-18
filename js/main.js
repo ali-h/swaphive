@@ -25,7 +25,7 @@ $(window).bind("load", function() {
 
     async function refresh () {
         updateMin();
-        bridgebal = await getBalances("hiveupme");
+        bridgebal = await getBalances("uswap");
         $("#hiveliquidity").text(bridgebal.HIVE.toFixed(3));
         $("#swaphiveliquidity").text(bridgebal["SWAP.HIVE"].toFixed(3));
 
@@ -98,7 +98,7 @@ $(window).bind("load", function() {
                 $("#swap").attr("disabled", "true");
                 if (r) r(false);
             }
-        } catch (e) {}
+        } catch (e) { console.log(e); }
     }
 
     var modal = new bootstrap.Modal(document.getElementById('authqr'), {
@@ -152,7 +152,7 @@ $(window).bind("load", function() {
     const HAS_APP_DATA = {
         name:"UPMESWAP",
         description:"Discounted Bridge",
-        icon:"https://upmeswap.github.io/assets/hiveupme.png",
+        icon:"https://uswap.app/assets/hiveupme.png",
     };
     const app_key = uuidv4();
     var token
@@ -202,7 +202,7 @@ $(window).bind("load", function() {
                     if (currency !== "HIVE") {
                         hive_keychain.requestSendToken(
                             user,
-                            "hiveupme",
+                            "uswap",
                             amount,
                             memo,
                             currency,
@@ -222,7 +222,7 @@ $(window).bind("load", function() {
                     } else {
                         hive_keychain.requestTransfer(
                             user,
-                            "hiveupme",
+                            "uswap",
                             amount,
                             memo,
                             currency,
@@ -287,7 +287,7 @@ $(window).bind("load", function() {
                                                 "contractAction": "transfer",
                                                 "contractPayload": {
                                                     "symbol": currency,
-                                                    "to": "hiveupme",
+                                                    "to": "uswap",
                                                     "quantity": amount,
                                                     "memo": memo
                                                 }
@@ -315,7 +315,7 @@ $(window).bind("load", function() {
                                                     "transfer",
                                                     {
                                                         from: user,
-                                                        to: 'hiveupme',
+                                                        to: 'uswap',
                                                         amount: `${amount} HIVE`,
                                                         memo,
                                                     }
@@ -412,4 +412,12 @@ $(window).bind("load", function() {
     });
 
     refresh();
+
+    // update every 15 seconds
+    (async function autoRefresh() {
+        await refresh();
+        await updateBalance();
+        updateSwap();
+        setTimeout(autoRefresh, 15000);
+    })();
 });
